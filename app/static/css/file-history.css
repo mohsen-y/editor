@@ -1,0 +1,21 @@
+/* 
+File History Styles
+*/
+
+.diff-header {
+    font-size: 15px;
+    color: #888;
+}
+
+.diff-removed {
+    color: #e74c3c;
+}
+
+.diff-added {
+    color: #2ecc71;
+}
+
+.diff-removed, .diff-added, .diff-not-changed {
+    font-family: monospace;
+    font-size: 16px;
+}
