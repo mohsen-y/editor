@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock title %}</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open Sans:300,400,700">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=JetBrains Mono">
+  {% block head %}{% endblock head %}
+</head>
+
+<body>
+  <div class="template-page-wrapper">
+    <div class="navbar-collapse collapse sidebar">
+      <ul class="sidebar-menu">
+        <li class="user-info"><a><i class="fa fa-user" style="font-size: 25px;"></i><strong style="font-size: 25px;" id="user-username">{{ user.username }}</strong></a></li>
+        <br>
+        <li><a href="{% url 'projects_retrieve_project_create' %}"><i class="fa fa-database"></i>All Projects</a></li>
+        <li class="sub">
+          <a href="javascript:;">
+            <i class="fa fa-database"></i>My Projects<div class="pull-right"><span class="caret"></span></div>
+          </a>
+          <ul class="submenu">
+            {% if projects %}
+            {% for project in projects.all|dictsortreversed:"created_at" %}
+            <li><a href="{% url 'project_retrieve_file_create' project.pk %}">{{ project.name }}</a></li>
+            {% endfor %}
+            {% else %}
+            <li><a></a></li>
+            {% endif %}
+          </ul>
+        </li>
+        <li class="sub">
+          <a href="javascript:;">
+            <i class="fa fa-database"></i>Collaborated Projects<div class="pull-right"><span class="caret"></span></div>
+          </a>
+          <ul class="submenu">
+            {% if project_collaborations %}
+            {% for project_collaboration in project_collaborations.all|dictsortreversed:"created_at" %}
+            <li><a href="{% url 'project_retrieve_file_create' project_collaboration.project.pk %}">{{ project_collaboration.project.name }}</a></li>
+            {% endfor %}
+            {% else %}
+            <li><a></a></li>
+            {% endif %}
+          </ul>
+        </li>
+        <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>  <!-- TODO: to be implemented -->
+        <li class="danger"><a href="{% url 'user_sign_out' %}"><i class="fa fa-sign-out"></i>Sign Out</a></li>
+      </ul>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        {% block breadcrumb %}{% endblock breadcrumb %}
+        {% block content %}{% endblock content %}
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/sidebar-menu.js' %}"></script>
+  <script>
+    const authenticatedUserUsername = document.getElementById("user-username").textContent;
+  </script>
+  {% block scripts %}{% endblock scripts %}
+</body>
+</html>
