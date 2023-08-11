@@ -41,7 +41,7 @@
       {% csrf_token %}
       <div class="row {% if form.name.errors or form.non_field_errors %}has-error{% endif %}">
         <div class="col-md-5">
-          <input type="text" class="form-control" id="name" name="name" placeholder="File Name" value="{{ form.name.value|default_if_none:'' }}" autofocus>
+          <input type="text" class="form-control" id="name" name="name" placeholder="File Name" value="{% if form.errors %}{{ form.name.value|default_if_none:'' }}{% endif %}" autofocus>
           {% if form.name.errors %}
           {% for error in form.name.errors %}
           <label class="control-label margin-top-7" for="name">{{ error }}</label>
