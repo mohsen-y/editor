@@ -28,4 +28,9 @@ urlpatterns = [
         view=login_required(function=views.project_collaboration_destroy),
         name="project_collaboration_destroy",
     ),
+    path(
+        route="files/<uuid:file_pk>/",
+        view=login_required(function=views.file_retrieve),
+        name="file_retrieve",
+    ),
 ]

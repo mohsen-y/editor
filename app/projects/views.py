@@ -180,3 +180,48 @@ def project_collaboration_destroy(request: HttpRequest, project_pk: int):
         to=redirect_to,
         project_pk=project.pk,
     )
+
+
+@require_http_methods(request_method_list=["GET"])
+def file_retrieve(request: HttpRequest, file_pk: int):
+    file = models.File.objects.filter(pk=file_pk).first()
+    if not file: return render(request=request, template_name="404.html")
+    is_project_owner = file.project.is_owner(user=request.user)
+
+    if not is_project_owner:
+        is_project_collaborator = file.project.is_collaborator(user=request.user)
+        if not is_project_collaborator:
+            return redirect(
+                to="project_collaboration_create",
+                project_pk=file.project.pk,
+            )
+
+    with open(
+        file=os.path.join(settings.MEDIAFILES_DIR, "projects", str(file.project.pk), str(file.pk)), mode="r"
+    ) as patch_file: file_content = patch_file.read()
+
+    file_consumer = models.FileConsumer.objects.create(
+        shadow={
+            "content": file_content,
+            "client_version": 0,
+            "server_version": 0,
+        },
+        backup_shadow={
+            "content": file_content,
+            "server_version": 0,
+        },
+    )
+
+    chat_messages = chat_models.Message.objects.filter(file=file).order_by("created_at").all()
+
+    return render(
+        request=request,
+        template_name=os.path.join("files", "retrieve.html"),
+        context={
+            "file": file,
+            "file_content": file_content,
+            "file_consumer_pk": file_consumer.pk,
+            "is_project_owner": is_project_owner,
+            "chat_messages": chat_messages,
+        },
+    )
