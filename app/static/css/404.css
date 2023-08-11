@@ -1,0 +1,15 @@
+/*
+404 (Not Found) Page
+*/
+
+.container { padding-top: 100px; }
+
+h1 { font-size: 80px; }
+
+.link-404 {      
+    color: #fff!important;
+    padding: 10px 20px;
+    background: #39ac31;
+    margin: 20px 0;
+    display: inline-block;
+}

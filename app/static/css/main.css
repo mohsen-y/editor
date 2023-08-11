@@ -1,0 +1,178 @@
+/*
+Main Styles
+*/
+
+/* CSS Imports
+--------------------------------------- */
+@import url(font-awesome.min.css);
+@import url(bootstrap.min.css);
+
+/* General Styles
+--------------------------------------- */
+* { font-family: "Open Sans", sans-serif; }
+body {
+    background-color: rgb(235,235,235);
+    font-weight: bold;
+}
+h1 { font-size: 24px; }
+.btn a {
+    color: white;
+    text-decoration: none;
+}
+.logo { display: inline-block; }
+.logo h1 {
+    font-size: 24px;
+    margin: 10px 15px;
+}
+.content-wrapper {
+    float: left;
+    width: 100%;
+}
+.content {
+    margin-left: 235px;
+    margin-top: 0px;
+    min-height: 100vh;
+    padding: 25px 20px 0 20px;
+    background-color: white;
+    overflow-x: hidden;
+}
+.margin-top-7 {margin-top: 7px;}
+.margin-bottom-15 { margin-bottom: 15px; }
+.margin-bottom-30 { margin-bottom: 30px; }
+
+/* Sidebar
+------------------------------------------------------*/
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+}
+.navbar-header { color: rgb(127,127,127); }
+.sidebar {
+    padding: 0;
+    margin-top: 20px;
+}
+.sidebar .sidebar-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.sidebar .sidebar-menu > li {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0px;
+}
+.sidebar .sidebar-menu > li > a {
+    display: block;
+    position: relative;
+    margin: 0;
+    border: 0px;
+    padding: 20px 15px;
+    text-decoration: none;
+    font-size: 14px;
+}
+.sidebar-menu a { color: black; }
+.sidebar-menu a:hover { text-decoration: none; }
+.sidebar-menu li.sub .submenu { display: none; }
+.sidebar-menu li.sub.open .submenu { display: block; }
+.submenu { padding-left: 0; }
+.submenu li {
+    list-style: none;
+    background-color: #d6d6d6ea;
+}
+.submenu li a {
+    display: block;
+    padding: 20px 15px;
+    margin: 0;
+}
+.sidebar-menu > li.sub.open > a {
+    background-color: rgba(145, 145, 145, 0.596);
+}
+.sidebar .sidebar-menu > li.active, .sidebar .sidebar-menu > li:not(.user-info) > a:hover {
+    background-color: rgb(106, 107, 105);
+}
+.sidebar .sidebar-menu > li.danger {
+    background-color: rgb(232, 167, 167);
+}
+.sidebar .sidebar-menu > li.danger > a:hover {
+    background-color: rgb(232, 110, 110);
+}
+.submenu li > a:hover {
+    background-color: rgb(106, 107, 105);
+}
+.sidebar .sidebar-menu > li > a > i {
+    font-size: 16px;
+    top: 2px;
+    margin-top: 1px;
+    margin-left: 1px;
+    margin-right: 4px;
+    display: inline-block;
+    width: 1.25em;
+    text-align: center;
+}
+
+/* Preferences Form
+------------------------------------------*/
+#preferences-form {
+    max-width: 960px;
+    margin-bottom: 30px;
+}
+
+/* Bootstrap overrides
+----------------------------------------------*/
+.nav-pills > li > a, .nav-tabs > li > a, .alert, .progress, .panel, .btn, .panel-group .panel, .form-control, .modal-content, .breadcrumb {
+    border-radius: 5px;
+}
+.list-group-item:first-child, .panel-heading {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.list-group-item:last-child {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-control-feedback { right: 15px; }
+
+/* Media Queries
+------------------------------------------------------*/
+@media screen and (min-width: 992px) {
+    .sidebar {
+        width: 235px;
+        float: left;
+        position: relative;
+        margin-right: -100%;
+    }
+}
+@media screen and (max-width: 991px) {
+    .navbar-form {
+        padding: 0;
+        margin-left: 0;
+    }
+    .navbar-header { float: none; }
+    .navbar-toggle { display: block; }
+    .sidebar {
+        border-top: 0 !important;
+        margin: 20px;
+    }
+    .sidebar.navbar-collapse.collapse {
+        display: none !important;
+    }
+    .sidebar.navbar-collapse.in {
+        border-top: 0 !important;
+        margin: 20px;
+        position: relative;
+        overflow: hidden !important;
+        overflow-y: auto !important;
+        display: block !important;
+    }
+    .content-wrapper { float: none; }
+    .content { margin: 0; }
+}
+
+/* Tables
+------------------------------------------------------*/
+
+.table {
+    table-layout: fixed;
+    width: 100%;
+}

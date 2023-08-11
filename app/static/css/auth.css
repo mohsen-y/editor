@@ -1,0 +1,40 @@
+/*
+Authentication Styles
+*/
+
+/* CSS Imports
+--------------------------------------- */
+@import url(font-awesome.min.css);
+@import url(bootstrap.min.css);
+
+/* General Styles
+--------------------------------------- */
+* { font-family: "Open Sans", sans-serif; }
+html, body, .container { height: 100%; }
+body {
+    background-color: rgb(235,235,235);
+    font-weight: bold;
+}
+.btn { font-weight: bold }
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.content {
+    background-color: rgb(216, 216, 216);
+    border: 1px solid rgb(172, 172, 172);
+    border-radius: 5px;
+    width: 40%;
+}
+
+/* Sign-in & Sign-ip Forms
+--------------------------------------- */
+.auth-form {
+    padding-top: 8%;
+    padding-bottom: 8%;
+    width: 70%;
+    margin: auto;
+}
