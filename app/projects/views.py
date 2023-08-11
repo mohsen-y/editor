@@ -133,3 +133,34 @@ def project_destroy(request: HttpRequest, project_pk: int):
     project.delete()
 
     return redirect(to="projects_retrieve_project_create")
+
+
+@require_http_methods(request_method_list=["GET", "POST"])
+def project_collaboration_create(request: HttpRequest, project_pk: int):
+    if request.method == "GET":
+        project = models.Project.objects.filter(pk=project_pk).first()
+        if not project: return render(request=request, template_name="404.html")
+
+        if project.is_owner(user=request.user) or project.is_collaborator(user=request.user):
+            return redirect(
+                to="project_retrieve_file_create",
+                project_pk=project_pk,
+            )
+
+        return render(
+            request=request,
+            template_name=os.path.join("projects", "collaborations", "create.html"),
+            context={"project": project,}
+        )
+
+    elif request.method == "POST":
+        project = models.Project.objects.filter(pk=project_pk).first()
+        if not project: return render(request=request, template_name="404.html")
+
+        project.collaborators.add(request.user)
+        project.save()
+
+        return redirect(
+            to="project_retrieve_file_create",
+            project_pk=project_pk,
+        )

@@ -18,4 +18,9 @@ urlpatterns = [
         view=login_required(function=views.project_destroy),
         name="project_destroy",
     ),
+    path(
+        route="projects/<uuid:project_pk>/collaborations/",
+        view=login_required(function=views.project_collaboration_create),
+        name="project_collaboration_create",
+    ),
 ]
