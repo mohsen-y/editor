@@ -1,6 +1,6 @@
 # Web-based Collaborative Real-time Code Editor
 
-### Using the Redis Docker Image (for Redis Channel Layer Used by Django Channels Library)
+### Using Redis Docker Image (for Redis Channel Layer Used by Django Channels Library)
 
 ![Docker Image](https://img.shields.io/docker/v/mohsen2000/redis/latest)
 
@@ -17,5 +17,5 @@ docker pull mohsen2000/redis:latest
 **Step 2:** Step 2: Run the Container
 
 ```bash
-docker run --name my-redis-container -d mohsen2000/redis:latest
+docker run --name your-redis-container -d mohsen2000/redis:latest
 ```
