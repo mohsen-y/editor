@@ -1,1 +1,1 @@
-# Online Collaborative Real-time Code Editor
+# Web-based Collaborative Real-time Code Editor
