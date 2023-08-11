@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'js/components/codemirror-5.65.13/lib/codemirror.css' %}">
+<link rel="stylesheet" href="{% static 'css/editor.css' %}">
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock head %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+  {% if not is_project_owner %}
+  <li class="active">{{ file.project.owner.username }}</li>
+  <li class="active">Projects</li>
+  {% else %}
+  <li class="active"><a href="{% url 'projects_retrieve_project_create' %}">Projects</a></li>
+  {% endif %}
+  <li class="active"><a href="{% url 'project_retrieve_file_create' file.project.pk %}">{{ file.project.name }}</a></li>
+  <li class="active">{{ file.name }}</li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-9">
+    <textarea id="editor" name="editor">{{ file_content }}</textarea>
+  </div>
+
+  <div class="col-md-3">
+    <div class="chat-box">
+      <div class="chat-messages" id="chat-messages">
+        {% for message in chat_messages %}
+        <div class="chat-message">
+          <span class="creator">
+            {% if message.creator.username == user.username %}
+            You
+            {% else %}
+            {{ message.creator.username }}
+            {% endif %}
+          </span>
+          <span class="datetime">{% timezone "Asia/Tehran" %}{{ message.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}</span>
+          <p>{{ message.content }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="chat-input">
+        <input type="text" id="message-input" placeholder="Enter your message ...">
+        <button id="message-submit">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="file-pk" style="display: none;">{{ file.pk }}</div>
+<div id="file-extension" style="display: none;">{{ file.extension }}</div>
+<div id="file-consumer-pk" style="display: none;">{{ file_consumer_pk }}</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/components/codemirror-5.65.13/lib/codemirror.js' %}"></script>
+<!-- TODO: add language supprt for other languages -->
+<script src="{% static 'js/components/codemirror-5.65.13/mode/css/css.js' %}"></script>
+<script src="{% static 'js/components/codemirror-5.65.13/mode/javascript/javascript.js' %}"></script>
+<script src="{% static 'js/components/codemirror-5.65.13/mode/xml/xml.js' %}"></script>
+<script src="{% static 'js/components/codemirror-5.65.13/mode/htmlmixed/htmlmixed.js' %}"></script>
+<script src="{% static 'js/components/codemirror-5.65.13/mode/clike/clike.js' %}"></script>
+<script src="{% static 'js/components/codemirror-5.65.13/mode/php/php.js' %}"></script>
+<script src="{% static 'js/components/codemirror-5.65.13/mode/python/python.js' %}"></script>
+<script src="{% static 'js/components/codemirror-5.65.13/mode/sql/sql.js' %}"></script>
+<script src="{% static 'js/diff-match-patch-uncompressed.js' %}"></script>
+<script>
+  const filePk = document.getElementById("file-pk").textContent;
+  const fileExtension = document.getElementById("file-extension").textContent;
+  const fileConsumerPk = document.getElementById("file-consumer-pk").textContent;
+</script>
+<script src="{% static 'js/editor.js' %}"></script>
+<script src="{% static 'js/chat.js' %}"></script>
+{% endblock scripts %}

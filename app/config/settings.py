@@ -15,6 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR_PARENT = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,6 +46,7 @@ THIRD_PARTY_APPS = []
 
 LOCAL_APPS = [
     "users.apps.UsersConfig",
+    "projects.apps.ProjectsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -72,6 +74,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "projects.context_processors.projects",
             ],
         },
     },
@@ -133,6 +136,11 @@ STATICFILES_DIRS = [
 STATIC_ROOT = "/var/www/editor/app/static/"
 
 
+# Media files
+
+MEDIAFILES_DIR = os.path.join(BASE_DIR_PARENT, "media")
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -150,3 +158,15 @@ LOGOUT_REDIRECT_URL = LOGIN_URL
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SESSION_COOKIE_AGE = 24 * 60 * 60  # 1 Day
+
+
+# Channel layers
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

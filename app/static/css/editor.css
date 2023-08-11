@@ -1,0 +1,13 @@
+/*
+Editor Syles
+*/
+
+.CodeMirror {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.CodeMirror * {
+    font-family: monospace;
+}

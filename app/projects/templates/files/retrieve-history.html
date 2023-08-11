@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/file-history.css' %}">
+{% endblock head %}
+
+{% block breadcrumb %}
+<ol class="breadcrumb">
+  {% if not is_project_owner %}
+  <li class="active">{{ file.project.owner.username }}</li>
+  <li class="active">Projects</li>
+  {% else %}
+  <li class="active"><a href="{% url 'projects_retrieve_project_create' %}">Projects</a></li>
+  {% endif %}
+  <li class="active"><a href="{% url 'project_retrieve_file_create' file.project.pk %}">{{ file.project.name }}</a></li>
+  <li class="active"><a href="{% url 'file_retrieve' file.pk %}">{{ file.name }}</a></li>
+  <li class="active">History</li>
+</ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <pre id="patch-content">{% if patch_file_content == "" %}No changes have been made to this file yet.{% endif %}</pre>
+  </div>
+</div>
+
+<div id="patch-file-content" style="display: none;">{{ patch_file_content }}</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  const patchFileContent = document.getElementById("patch-file-content").textContent;
+</script>
+<script src="{% static 'js/file-history.js' %}"></script>
+{% endblock scripts %}
