@@ -254,3 +254,20 @@ def file_history_retrieve(request: HttpRequest, file_pk: int):
             "is_project_owner": is_project_owner,
         },
     )
+
+
+@require_http_methods(request_method_list=["POST"])
+def file_destroy(request: HttpRequest, file_pk: int):
+    file = models.File.objects.filter(pk=file_pk).first()
+    if not file: return render(request=request, template_name="404.html")
+
+    # TODO: database transaction
+    os.remove(path=os.path.join(settings.MEDIAFILES_DIR, "projects", str(file.project.pk), str(file.pk)))
+    os.remove(path=os.path.join(settings.MEDIAFILES_DIR, "projects", str(file.project.pk), f"{file.pk}.patch"))
+
+    file.delete()
+
+    return redirect(
+        to="project_retrieve_file_create",
+        project_pk=file.project.pk,
+    )

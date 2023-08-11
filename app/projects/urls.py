@@ -38,4 +38,9 @@ urlpatterns = [
         view=login_required(function=views.file_history_retrieve),
         name="file_history_retrieve",
     ),
+    path(
+        route="files/<uuid:file_pk>/destroy/",
+        view=login_required(function=views.file_destroy),
+        name="file_destroy",
+    ),
 ]
