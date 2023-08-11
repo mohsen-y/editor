@@ -130,7 +130,7 @@ def project_destroy(request: HttpRequest, project_pk: int):
     # TODO: database transaction
     shutil.rmtree(path=os.path.join(settings.MEDIAFILES_DIR, "projects", str(project.pk)))
 
-    project.delete()
+    project.delete()  # TODO: notify users working on the porject (and its files)
 
     return redirect(to="projects_retrieve_project_create")
 
@@ -265,7 +265,7 @@ def file_destroy(request: HttpRequest, file_pk: int):
     os.remove(path=os.path.join(settings.MEDIAFILES_DIR, "projects", str(file.project.pk), str(file.pk)))
     os.remove(path=os.path.join(settings.MEDIAFILES_DIR, "projects", str(file.project.pk), f"{file.pk}.patch"))
 
-    file.delete()
+    file.delete()  # TODO: notify users working on the file
 
     return redirect(
         to="project_retrieve_file_create",
