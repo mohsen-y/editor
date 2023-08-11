@@ -43,7 +43,9 @@ DJANGO_DEFAULT_APPS = [
 
 THIRD_PARTY_APPS = []
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "users.apps.UsersConfig",
+]
 
 INSTALLED_APPS = DJANGO_DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -135,3 +137,16 @@ STATIC_ROOT = "/var/www/editor/app/static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Authentication
+
+AUTH_USER_MODEL = "users.User"
+
+LOGIN_URL = "user_sign_in"
+LOGIN_REDIRECT_URL = "projects_retrieve_project_create"
+LOGOUT_REDIRECT_URL = LOGIN_URL
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SESSION_COOKIE_AGE = 24 * 60 * 60  # 1 Day
