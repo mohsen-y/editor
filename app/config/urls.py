@@ -19,4 +19,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path(route="", view=include("users.urls")),
+    path(route="", view=include("projects.urls")),
 ]
