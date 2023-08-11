@@ -33,4 +33,9 @@ urlpatterns = [
         view=login_required(function=views.file_retrieve),
         name="file_retrieve",
     ),
+    path(
+        route="files/<uuid:file_pk>/history/",
+        view=login_required(function=views.file_history_retrieve),
+        name="file_history_retrieve",
+    ),
 ]

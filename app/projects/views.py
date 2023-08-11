@@ -225,3 +225,32 @@ def file_retrieve(request: HttpRequest, file_pk: int):
             "chat_messages": chat_messages,
         },
     )
+
+
+@require_http_methods(request_method_list=["GET"])
+def file_history_retrieve(request: HttpRequest, file_pk: int):
+    file = models.File.objects.filter(pk=file_pk).first()
+    if not file: return render(request=request, template_name="404.html")
+    is_project_owner = file.project.is_owner(user=request.user)
+
+    if not is_project_owner:
+        is_project_collaborator = file.project.is_collaborator(user=request.user)
+        if not is_project_collaborator:
+            return redirect(
+                to="project_collaboration_create",
+                project_pk=file.project.pk,
+            )
+
+    with open(
+        file=os.path.join(settings.MEDIAFILES_DIR, "projects", str(file.project.pk), f"{file.pk}.patch"), mode="r"
+    ) as patch_file: patch_file_content = patch_file.read()
+
+    return render(
+        request=request,
+        template_name=os.path.join("files", "retrieve-history.html"),
+        context={
+            "file": file,
+            "patch_file_content": patch_file_content,
+            "is_project_owner": is_project_owner,
+        },
+    )
