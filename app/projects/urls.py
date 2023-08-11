@@ -13,4 +13,9 @@ urlpatterns = [
         view=login_required(function=views.project_retrieve_file_create),
         name="project_retrieve_file_create",
     ),
+    path(
+        route="projects/<uuid:project_pk>/destroy/",
+        view=login_required(function=views.project_destroy),
+        name="project_destroy",
+    ),
 ]

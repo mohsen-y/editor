@@ -120,3 +120,16 @@ def project_retrieve_file_create(request: HttpRequest, project_pk: int):
                 "form": form,
             },
         )
+
+
+@require_http_methods(request_method_list=["POST"])
+def project_destroy(request: HttpRequest, project_pk: int):
+    project = models.Project.objects.filter(pk=project_pk).first()
+    if not project: return render(request=request, template_name="404.html")
+
+    # TODO: database transaction
+    shutil.rmtree(path=os.path.join(settings.MEDIAFILES_DIR, "projects", str(project.pk)))
+
+    project.delete()
+
+    return redirect(to="projects_retrieve_project_create")
