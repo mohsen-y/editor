@@ -1,0 +1,36 @@
+{% extends "base-auth.html" %}
+
+{% block content %}
+
+<form class="form-horizontal auth-form" action="{% url 'user_sign_in' %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <div class="row {% if form.errors %}has-error{% endif %}">
+      <div class="col-md-12">
+        <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ form.username.value|default_if_none:'' }}" autofocus required>
+        {% if form.errors %}
+        <label class="control-label" for="username">Incorrect username or password.</label>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class="col-md-12">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class="col-md-12">
+        <input type="submit" value="Sign in" class="btn btn-default">
+        <a href="{% url 'user_create' %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}" class="btn btn-default">Don't Have an Account?</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock content %}
