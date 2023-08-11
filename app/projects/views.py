@@ -164,3 +164,19 @@ def project_collaboration_create(request: HttpRequest, project_pk: int):
             to="project_retrieve_file_create",
             project_pk=project_pk,
         )
+
+
+@require_http_methods(request_method_list=["POST"])
+def project_collaboration_destroy(request: HttpRequest, project_pk: int):
+    project = models.Project.objects.filter(pk=project_pk).first()
+    if not project: return render(request=request, template_name="404.html")
+
+    project.collaborators.remove(request.user)
+    project.save()
+
+    redirect_to = request.META.get("HTTP_REFERER", "project_collaboration_create")
+
+    return redirect(
+        to=redirect_to,
+        project_pk=project.pk,
+    )
