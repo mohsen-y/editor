@@ -9,12 +9,13 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 
 from projects.routing import websocket_urlpatterns as projects_websocket_urlpatterns
 from channels.routing import ProtocolTypeRouter, ChannelNameRouter, URLRouter
+from chat.routing import websocket_urlpatterns as chat_websocket_urlpatterns
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 import os
 
-websocket_urlpatterns = projects_websocket_urlpatterns
+websocket_urlpatterns = projects_websocket_urlpatterns + chat_websocket_urlpatterns
 
 os.environ.setdefault(key="DJANGO_SETTINGS_MODULE", value="config.settings")
 
