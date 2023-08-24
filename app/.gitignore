@@ -160,5 +160,5 @@ cython_debug/
 #.idea/
 
 
-# Exception for any lib/ inside app/static/
-!static/*/lib/
+# Exception for static/js/components/codemirror-5.65.13/lib/
+!static/js/components/codemirror-5.65.13/lib/
