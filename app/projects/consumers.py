@@ -1,7 +1,7 @@
 from projects.utils.diff_match_patch import get_diff_match_patch
 from channels.generic.websocket import AsyncWebsocketConsumer
-from projects.utils.locks import get_locks
 from projects.utils import content_differences
+from projects.utils.locks import get_locks
 from django.conf import settings
 from projects import models
 import aiofiles
