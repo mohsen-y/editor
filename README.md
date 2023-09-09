@@ -11,12 +11,12 @@ To start using the Redis Docker image, follow these steps:
 **Step 1:** Pull the Docker Image
 
 ```bash
-docker pull mohsen2000/redis:latest
+docker pull redis:latest
 ```
 **Step 2:** Step 2: Run the Container
 
 ```bash
-docker run --name your-redis-container -d mohsen2000/redis:latest
+docker run -d --name your-redis-container -p 6379:6379 redis/redis:latest
 ```
 
 ## Getting Started with the Django Project
