@@ -13,64 +13,65 @@
 {% block content %}
 <div class="row">
   <div class="col-md-12">
-    <h1 class="margin-bottom-15">{{ project.name }}</h4>
-    <h6 class="margin-bottom-15">Created By {{ project.owner.username }} At {{ project.created_at }}</h6>
-    <form role="form" id="preferences-form" action="{% url 'project_collaboration_create' project.pk %}" method="post">
+    <h1>{{ project.name }}</h4>
+    <h6 class="mt-16">Created By {{ project.owner.username }} At {{ project.created_at }}</h6>
+    <form
+			role="form"
+			action="{% url 'project_collaboration_create' project.pk %}"
+			method="post"
+			class="project-user-actions mt-16"
+		>
       {% csrf_token %}
-      <div class="row">
-        <div class="col-md-12">
-          <button type="submit" class="btn btn-primary">Join</button>
-        </div>
-      </div>
+			<button type="submit" class="btn btn-primary">Join</button>
     </form>
   </div>
 </div>
-
-<div class="row">
-  <div class="col-md-5">
-    <div class="table-responsive">
-      <h4 class="margin-bottom-15">Files</h4>
-      <table class="table table-striped table-hover table-bordered">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th style="width: 30%">Created At</th>
-            <th style="width: 30%">Created By</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for file in project.files.all %}
-          <tr>
-            <td>{{ file.name }}</td>
-            <td style="width: 30%">{% timezone "Asia/Tehran" %}{{ file.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}</td>
-            <td style="width: 30%">{{ file.creator.username }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="col-md-3">
-    <div class="table-responsive">
-      <h4 class="margin-bottom-15">Collaborators</h4>
-      <table class="table table-striped table-hover table-bordered">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Joined At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for project_collaboration in project.project_collaborations.all|dictsortreversed:"created_at" %}
-          <tr>
-            <td>{{ project_collaboration.user.username }}</td>
-            <td>{% timezone "Asia/Tehran" %}{{ project_collaboration.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="tables-container">
+	<div style="min-width: 66.666%;">
+		<h4>Files</h4>
+		<div class="mt-16 table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Created At</th>
+						<th>Created By</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for file in project.files.all %}
+					<tr>
+						<td>{{ file.name }}</td>
+						<td>
+							{% timezone "Asia/Tehran" %}{{ file.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}
+						</td>
+						<td>{{ file.creator.username }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div>
+		<h4>Collaborators</h4>
+		<div class="mt-16 table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Username</th>
+						<th>Joined At</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for project_collaboration in project.project_collaborations.all|dictsortreversed:"created_at" %}
+					<tr>
+						<td>{{ project_collaboration.user.username }}</td>
+						<td>{% timezone "Asia/Tehran" %}{{ project_collaboration.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 {% endblock content %}

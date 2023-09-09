@@ -16,42 +16,51 @@
   {% else %}
   <li class="active"><a href="{% url 'projects_retrieve_project_create' %}">Projects</a></li>
   {% endif %}
-  <li class="active"><a href="{% url 'project_retrieve_file_create' file.project.pk %}">{{ file.project.name }}</a></li>
+  <li class="active">
+		<a href="{% url 'project_retrieve_file_create' file.project.pk %}">{{ file.project.name }}</a>
+	</li>
   <li class="active">{{ file.name }}</li>
+	<span class="connection-status"></span>
 </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-9">
-    <textarea id="editor" name="editor">{{ file_content }}</textarea>
-  </div>
-
-  <div class="col-md-3">
-    <div class="chat-box">
-      <div class="chat-messages" id="chat-messages">
-        {% for message in chat_messages %}
-        <div class="chat-message">
-          <span class="creator">
-            {% if message.creator.username == user.username %}
-            You
-            {% else %}
-            {{ message.creator.username }}
-            {% endif %}
-          </span>
-          <span class="datetime">{% timezone "Asia/Tehran" %}{{ message.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}</span>
-          <p>{{ message.content }}</p>
-        </div>
-        {% endfor %}
-      </div>
-      <div class="chat-input">
-        <input type="text" id="message-input" placeholder="Enter your message ...">
-        <button id="message-submit">Send</button>
-      </div>
-    </div>
-  </div>
+<div class="code-mirror-wrapper">
+	<textarea id="editor" name="editor">{{ file_content }}</textarea>
+	<button class="btn btn-primary btn-chatroom" onclick="openChatroom()">
+		Chatroom
+	</button>
+	<div class="chat-box-container">
+		<div class="chat-box">
+			<div class="chat-messages" id="chat-messages">
+				{% for message in chat_messages %}
+				<div class="chat-message">
+					<span class="creator">
+						{% if message.creator.username == user.username %}
+						You
+						{% else %}
+						{{ message.creator.username }}
+						{% endif %}
+					</span>
+					<span class="datetime">
+						{% timezone "Asia/Tehran" %}{{ message.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}
+					</span>
+					<p>{{ message.content }}</p>
+				</div>
+				{% endfor %}
+			</div>
+			<div class="chat-box_user-actions">
+				<div class="chat-input">
+					<input type="text" id="message-input" placeholder="Enter your message ...">
+					<button id="message-submit" class="btn btn-primary">Send</button>
+				</div>
+				<button class="btn btn-danger btn-close" onclick="closeChatroom()">
+					<i class="fa fa-times" aria-hidden="true"></i>Close
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
-
 <div id="file-pk" style="display: none;">{{ file.pk }}</div>
 <div id="file-extension" style="display: none;">{{ file.extension }}</div>
 <div id="file-consumer-pk" style="display: none;">{{ file_consumer_pk }}</div>
@@ -76,4 +85,62 @@
 </script>
 <script src="{% static 'js/editor.js' %}"></script>
 <script src="{% static 'js/chat.js' %}"></script>
+<script>
+	const chatBoxContainer = document.querySelector('.chat-box-container');
+
+	const calculateAvailableViewportHeight = (...heightsToSubtract) => {
+		const content = document.querySelector('.content');
+		const contentComputedStyle = window.getComputedStyle(content);
+		const contentPaddingTop = parseInt(contentComputedStyle.paddingTop);
+		const contentPaddingBottom = parseInt(contentComputedStyle.paddingBottom);
+		const baseHeight = 
+			getViewportHeight() -
+			header.offsetHeight -
+			contentPaddingTop -
+			contentPaddingBottom;
+
+		if (!heightsToSubtract.length) return `${baseHeight}px`;
+
+		return `${
+			baseHeight - heightsToSubtract.reduce((acc, height) => acc + height, 0)
+		}px`;
+	};
+
+	const setCodeMirrorHeights = () => {
+		const codeMirror = document.querySelector('.CodeMirror');
+		const codeMirrorWrapper = document.querySelector('.code-mirror-wrapper');
+		const codeMirrorWrapperComputedStyle = window.getComputedStyle(codeMirrorWrapper);
+		const codeMirrorWrapperGap = parseInt(codeMirrorWrapperComputedStyle.gap);
+		const chatroom = document.querySelector('.btn-chatroom');
+		const mediaQuery = window.matchMedia("(max-width: 991px)");
+
+		if (mediaQuery.matches) {
+			codeMirror.style.height = calculateAvailableViewportHeight(
+				codeMirrorWrapperGap, chatroom.offsetHeight
+			);
+			chatBoxContainer.style.height = 'auto';
+			chatBoxContainer.style.top = `${header.offsetHeight}px`;
+		} else {
+			codeMirror.style.height = calculateAvailableViewportHeight();
+			chatBoxContainer.style.padding = '0';
+			chatBoxContainer.style.top = '';
+			chatBoxContainer.style.height = calculateAvailableViewportHeight();
+		}
+	};
+
+const openChatroom = () => {
+	chatBoxContainer.style.padding = '16px';
+	chatBoxContainer.classList.add('chat-box-container--open');
+};
+
+const closeChatroom = () => {
+	chatBoxContainer.classList.remove('chat-box-container--open');
+	setTimeout(() => {
+		chatBoxContainer.style.padding = '0';
+	}, 500);
+};
+
+setCodeMirrorHeights();
+window.addEventListener('resize', setCodeMirrorHeights);
+</script>
 {% endblock scripts %}

@@ -4,37 +4,96 @@ Authentication Styles
 
 /* CSS Imports
 --------------------------------------- */
+
 @import url(font-awesome.min.css);
 @import url(bootstrap.min.css);
 
 /* General Styles
 --------------------------------------- */
+
+:root {
+  --viewport-height: 100vh;
+}
+
 * { font-family: "Open Sans", sans-serif; }
-html, body, .container { height: 100%; }
+
 body {
-    background-color: rgb(235,235,235);
-    font-weight: bold;
+	min-height: var(--viewport-height);
+	background-color: rgb(235,235,235);
+	font-weight: bold;
 }
+
 .btn { font-weight: bold }
-.container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+
+.auth-container {
+	width: 100vw;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
-.content {
-    background-color: rgb(216, 216, 216);
-    border: 1px solid rgb(172, 172, 172);
-    border-radius: 5px;
-    width: 40%;
+
+.auth-content {
+	flex-grow: 1;
+	background-color: rgb(216, 216, 216);
 }
 
 /* Sign-in & Sign-ip Forms
 --------------------------------------- */
+
 .auth-form {
-    padding-top: 8%;
-    padding-bottom: 8%;
-    width: 70%;
-    margin: auto;
+	padding: 8% 15%;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.auth-form .form-group {
+	margin: 0;
+}
+
+.auth-form .form-group--user-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.auth-form .form-group--user-actions::before,
+.auth-form .form-group--user-actions::after {
+	display: none;
+}
+
+.auth-form .form-group--user-actions input[type="submit"],
+.auth-form .form-group--user-actions a {
+	flex-grow: 1;
+	white-space: break-spaces;
+}
+
+.auth-form .control-label {
+	text-align: start;
+}
+
+/* Media Queries
+------------------------------------------------------*/
+
+@media screen and (max-width: 767px) {
+	.auth-content, .auth-form {
+		min-height: var(--viewport-height);
+	}
+
+	.auth-form {
+		justify-content: center;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.auth-container {
+		min-height: var(--viewport-height);
+		padding: 16px;
+	}
+
+	.auth-content {
+		max-width: 576px;
+		border: 1px solid rgb(172, 172, 172);
+		border-radius: 5px;
+	}
 }

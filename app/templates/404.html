@@ -6,14 +6,10 @@
 {% endblock head %}
 
 {% block content %}
-  <div class="row"> 
-    <div class="col-sm-12 text-center">
-      <div class="container">
-        <h1>404</h1>
-        <h2>Look like you're lost</h2>
-        <p>The page you are looking for is not avaible!</p>
-        <a href="{% url 'projects_retrieve_project_create' %}" class="link-404">Go to All Projects</a>
-      </div>
-    </div>
+  <div class="container-404"> 
+		<h1>404</h1>
+		<h2>Looks like you're lost</h2>
+		<p>The page you are looking for is not avaible!</p>
+		<a href="{% url 'projects_retrieve_project_create' %}" class="link-404">Go to All Projects</a>
   </div>
 {% endblock content %}

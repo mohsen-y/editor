@@ -13,57 +13,152 @@
 
 <body>
   <div class="template-page-wrapper">
-    <div class="navbar-collapse collapse sidebar">
+    <aside class="sidebar">
       <ul class="sidebar-menu">
-        <li class="user-info"><a><i class="fa fa-user" style="font-size: 25px;"></i><strong style="font-size: 25px;" id="user-username">{{ user.username }}</strong></a></li>
-        <br>
-        <li><a href="{% url 'projects_retrieve_project_create' %}"><i class="fa fa-database"></i>All Projects</a></li>
-        <li class="sub">
-          <a href="javascript:;">
-            <i class="fa fa-database"></i>My Projects<div class="pull-right"><span class="caret"></span></div>
+        <li class="sidebar-menu-item sidebar-menu-item--user-info">
+					<i class="fa fa-user"></i><span id="user-username" title="{{ user.username }}">
+						{{ user.username }}
+					</span>
+				</li>
+        <hr class="sidebar-menu_hr">
+        <li class="sidebar-menu-item">
+					<a href="{% url 'projects_retrieve_project_create' %}" class="sidebar-menu-item_link">
+						<i class="fa fa-database"></i>All Projects
+					</a>
+				</li>
+        <li class="sidebar-menu-item sub">
+          <a href="javascript:;" class="sidebar-menu-item_link sidebar-menu-item_link--sub-menu">
+						<span><i class="fa fa-database"></i>My Projects</span>
+						<span class="caret">
           </a>
-          <ul class="submenu">
+          <ul class="sidebar-menu-item_sub-menu">
             {% if projects %}
             {% for project in projects.all|dictsortreversed:"created_at" %}
-            <li><a href="{% url 'project_retrieve_file_create' project.pk %}">{{ project.name }}</a></li>
+            <li>
+							<a
+								href="{% url 'project_retrieve_file_create' project.pk %}"
+								class="sidebar-menu-item_link"
+							>
+								{{ project.name }}
+							</a>
+						</li>
             {% endfor %}
             {% else %}
-            <li><a></a></li>
+            <li><a class="sidebar-menu-item_link"></a></li>
             {% endif %}
           </ul>
         </li>
-        <li class="sub">
-          <a href="javascript:;">
-            <i class="fa fa-database"></i>Collaborated Projects<div class="pull-right"><span class="caret"></span></div>
+        <li class="sidebar-menu-item sub">
+          <a href="javascript:;" class="sidebar-menu-item_link sidebar-menu-item_link--sub-menu">
+						<span><i class="fa fa-database"></i>Collaborated Projects</span>
+						<span class="caret">
           </a>
-          <ul class="submenu">
+          <ul class="sidebar-menu-item_sub-menu">
             {% if project_collaborations %}
             {% for project_collaboration in project_collaborations.all|dictsortreversed:"created_at" %}
-            <li><a href="{% url 'project_retrieve_file_create' project_collaboration.project.pk %}">{{ project_collaboration.project.name }}</a></li>
+            <li>
+							<a
+								href="{% url 'project_retrieve_file_create' project_collaboration.project.pk %}"
+								class="sidebar-menu-item_link"
+							>
+								{{ project_collaboration.project.name }}
+							</a>
+						</li>
             {% endfor %}
             {% else %}
-            <li><a></a></li>
+            <li><a class="sidebar-menu-item_link"></a></li>
             {% endif %}
           </ul>
         </li>
         <!-- <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li> -->  <!-- TODO: to be implemented -->
-        <li class="danger"><a href="{% url 'user_sign_out' %}"><i class="fa fa-sign-out"></i>Sign Out</a></li>
+        <li class="sidebar-menu-item sidebar-menu-item--danger">
+					<a href="{% url 'user_sign_out' %}" class="sidebar-menu-item_link">
+						<i class="fa fa-sign-out"></i>Sign Out
+					</a>
+				</li>
       </ul>
-    </div>
-
+    </aside>
+		<header class="header">
+			<i class="fa fa-navicon" aria-hidden="true" onclick="openNav()"></i>
+			<i class="fa fa-times" aria-hidden="true" onclick="closeNav()"></i>
+			<div class="header_breadcrumb-container">
+				{% block breadcrumb %}{% endblock breadcrumb %}
+			</div>
+		</header>
     <div class="content-wrapper">
-      <div class="content">
-        {% block breadcrumb %}{% endblock breadcrumb %}
+      <main class="content">
         {% block content %}{% endblock content %}
-      </div>
+      </main>
     </div>
   </div>
+	<div class="overlay"></div>
 
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/sidebar-menu.js' %}"></script>
   <script>
-    const authenticatedUserUsername = document.getElementById("user-username").textContent;
+    const authenticatedUserUsername = document.getElementById('user-username')
+			.textContent;
+		const sidebar = document.querySelector('.sidebar');
+		const header = document.querySelector('.header');
+		const contentWrapper = document.querySelector('.content-wrapper');
+		const overlay = document.querySelector('.overlay');
+		const openNavIcon = document.querySelector('.header .fa-navicon');
+		const closeNavIcon = document.querySelector('.header .fa-times');
+
+		const getViewportHeight = () => (
+			window.innerHeight || document.documentElement.clientHeight
+		);
+
+		const setDocumentViewportHeight = () => (
+			document.documentElement.style.setProperty(
+				'--viewport-height', `${getViewportHeight()}px`
+			)
+		);
+		
+		const setContentWrapperPaddingTop = () => (
+			contentWrapper.style.paddingTop = `${header.offsetHeight}px`
+		);
+			
+		const handleResize = () => {
+			setDocumentViewportHeight();
+			setContentWrapperPaddingTop();
+		};
+
+		const openNav = () => {
+			header.style.backgroundColor = '#fff';
+			overlay.style.display = 'block';
+			overlay.style.backgroundColor = 'rgba(0,0,0,0.4)';
+			sidebar.classList.add('sidebar--open');
+			openNavIcon.style.display = 'none';
+			closeNavIcon.style.display = 'flex';
+		};
+		
+		const closeNav = () => {
+			header.style.backgroundColor = 'transparent';
+			overlay.style.backgroundColor = 'rgba(0,0,0,0)';
+			setTimeout(() => {
+				overlay.style.display = 'none';
+			}, 500);
+			sidebar.classList.remove('sidebar--open');
+			closeNavIcon.style.display = 'none';
+			openNavIcon.style.display = 'flex';
+		};
+		
+		const handleClick = event => {
+			if (
+				!sidebar.contains(event.target)
+				&& !openNavIcon.contains(event.target)
+				&& !closeNavIcon.contains(event.target)
+				) {
+				closeNav();
+			}
+		};
+		
+		handleResize();
+		window.addEventListener('resize', handleResize);
+		document.addEventListener('mousedown', handleClick);
+		document.addEventListener('touchstart', handleClick);
   </script>
   {% block scripts %}{% endblock scripts %}
 </body>

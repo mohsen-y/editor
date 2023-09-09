@@ -2,7 +2,14 @@
 404 (Not Found) Page
 */
 
-.container { padding-top: 100px; }
+.container-404 {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
 
 h1 { font-size: 80px; }
 

@@ -13,19 +13,18 @@
   {% else %}
   <li class="active"><a href="{% url 'projects_retrieve_project_create' %}">Projects</a></li>
   {% endif %}
-  <li class="active"><a href="{% url 'project_retrieve_file_create' file.project.pk %}">{{ file.project.name }}</a></li>
+  <li class="active">
+		<a href="{% url 'project_retrieve_file_create' file.project.pk %}">{{ file.project.name }}</a>
+	</li>
   <li class="active"><a href="{% url 'file_retrieve' file.pk %}">{{ file.name }}</a></li>
   <li class="active">History</li>
 </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-12">
-    <pre id="patch-content">{% if patch_file_content == "" %}No changes have been made to this file yet.{% endif %}</pre>
-  </div>
-</div>
-
+<pre id="patch-content" class="mb-0">
+	{% if patch_file_content == "" %}No changes have been made to this file yet.{% endif %}
+</pre>
 <div id="patch-file-content" style="display: none;">{{ patch_file_content }}</div>
 {% endblock content %}
 

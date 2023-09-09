@@ -17,111 +17,165 @@
 {% block content %}
 <div class="row">
   <div class="col-md-12">
-    <h1 class="margin-bottom-15">{{ project.name }}</h4>
-    <h6 class="margin-bottom-15">Created By {% if is_project_owner %} You {% else %} {{ project.owner.username }} {% endif %} At {{ project.created_at }}</h6>
+    <h1>{{ project.name }}</h4>
+    <h6 class="mt-16">
+			Created By {% if is_project_owner %} You {% else %} {{ project.owner.username }} {% endif %} At {{ project.created_at }}
+		</h6>
     {% if is_project_owner %}
-    <form role="form" id="preferences-form" action="{% url 'project_destroy' project.pk %}" method="post">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-danger">Delete Project</button>
-      <button type="button" class="btn btn-primary" onclick="copyToClipboard(this, '{% url 'project_retrieve_file_create' project.pk %}')">Share</button>
+    <form
+			role="form"
+			action="{% url 'project_destroy' project.pk %}"
+			method="post"
+			class="project-user-actions mt-16"
+		>
+			{% csrf_token %}
+			<button type="submit" class="btn btn-danger">Delete Project</button>
+			<button
+				type="button"
+				class="btn btn-primary"
+				onclick="copyToClipboard(this, '{% url 'project_retrieve_file_create' project.pk %}')"
+			>
+				Share
+			</button>
     </form>
     {% else %}
-    <form role="form" id="preferences-form" action="{% url 'project_collaboration_destroy' project.pk %}" method="post">
+    <form
+			role="form"
+			action="{% url 'project_collaboration_destroy' project.pk %}"
+			method="post"
+			class="project-user-actions mt-16"
+		>
       {% csrf_token %}
       <button type="submit" class="btn btn-danger">Leave Project</button>
-      <button type="button" class="btn btn-primary" onclick="copyToClipboard(this, '{% url 'project_retrieve_file_create' project.pk %}')">Share</button>
+      <button
+				type="button"
+				class="btn btn-primary"
+				onclick="copyToClipboard(this, '{% url 'project_retrieve_file_create' project.pk %}')"
+			>
+				Share
+			</button>
     </form>
     {% endif %}
   </div>
 </div>
-
 <div class="row">
-  <div class="col-md-4">
-    <form role="form" id="preferences-form" action="{% url 'project_retrieve_file_create' project.pk %}" method="post" enctype="multipart/form-data">
+  <div class="col-md-12">
+    <form
+			role="form"
+			action="{% url 'project_retrieve_file_create' project.pk %}"
+			method="post"
+			enctype="multipart/form-data"
+			class="add-file-form"
+		>
       {% csrf_token %}
-      <div class="row {% if form.name.errors or form.non_field_errors %}has-error{% endif %}">
-        <div class="col-md-5">
-          <input type="text" class="form-control" id="name" name="name" placeholder="File Name" value="{% if form.errors %}{{ form.name.value|default_if_none:'' }}{% endif %}" autofocus>
-          {% if form.name.errors %}
-          {% for error in form.name.errors %}
-          <label class="control-label margin-top-7" for="name">{{ error }}</label>
-          {% endfor %}
-          {% endif %}
-          {% if form.non_field_errors %}
-          {% for error in form.non_field_errors %}
-          <label class="control-label margin-top-7" for="name">{{ error }}</label>
-          {% endfor %}
-          {% endif %}
+      <div class="{% if form.name.errors or form.non_field_errors %}has-error{% endif %}">
+				<p class="mb-0">Create a new file or choose an existing one:</p>
+        <div>
+          <input
+						type="text"
+						class="form-control"
+						id="name"
+						name="name"
+						placeholder="File Name"
+						value="{% if form.errors %}{{ form.name.value|default_if_none:'' }}{% endif %}"
+						autofocus
+					>
+						{% if form.non_field_errors %}
+							{% for error in form.non_field_errors %}
+								<label class="control-label mt-8 mb-0" for="name">{{ error }}</label>
+							{% endfor %}
+						{% endif %}
         </div>
-        <div class="col-md-1">
-          <h5>or</h5>
+        <div>
+          <input type="file" name="file">  <!-- TODO: filename exceeds its container -->
         </div>
-        <div class="col-md-5">
-          <input class="margin-top-7" type="file" name="file">  <!-- TODO: filename exceeds its container -->
-        </div>
-        <div class="col-md-1">
+				{% if form.name.errors %}
+					<div>
+						{% for error in form.name.errors %}
+							<label class="control-label mb-0" for="name">{{ error }}</label>
+						{% endfor %}
+					</div>
+				{% endif %}
+        <div>
           <button type="submit" class="btn btn-primary btn-sm">Add File</button>
         </div>
       </div>
     </form>
   </div>
 </div>
-
-<div class="row">
-  <div class="col-md-6">
-    <div class="table-responsive">
-      <h4 class="margin-bottom-15">Files</h4>
-      <table class="table table-striped table-hover table-bordered">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th style="width: 23%">Created At</th>
-            <th style="width: 18%">Created By</th>
-            <th style="width: 23%"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for file in project.files.all|dictsort:"name" %}
-          <tr>
-            <td><a href="{% url 'file_retrieve' file.pk %}">{{ file.name }}</a></td>
-            <td style="width: 23%">{% timezone "Asia/Tehran" %}{{ file.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}</td>
-            <td style="width: 18%">{{ file.creator.username }}</td>
-            <td style="width: 23%">
-              <form role="form" action="{% url 'file_destroy' file.pk %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-xs">Delete</button>
-                <a class="btn btn-primary btn-xs" href="{% url 'file_history_retrieve' file.pk %}">History</a>
-                <button type="button" class="btn btn-primary btn-xs" onclick="copyToClipboard(this, '{% url 'file_retrieve' file.pk %}')">Share</button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="col-md-3">
-    <div class="table-responsive">
-      <h4 class="margin-bottom-15">Collaborators</h4>
-      <table class="table table-striped table-hover table-bordered">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Joined At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for project_collaboration in project.project_collaborations.all|dictsortreversed:"created_at" %}
-          <tr>
-            <td>{{ project_collaboration.user.username }}</td>
-            <td>{% timezone "Asia/Tehran" %}{{ project_collaboration.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="tables-container">
+	<div style="min-width: 66.666%;">
+		<h4>Files</h4>
+		<div class="mt-16 table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Created At</th>
+						<th>Created By</th>
+						{% if project.files.length %}
+							<th></th>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for file in project.files.all|dictsort:"name" %}
+					<tr>
+						<td><a href="{% url 'file_retrieve' file.pk %}">{{ file.name }}</a></td>
+						<td>
+							{% timezone "Asia/Tehran" %}{{ file.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}
+						</td>
+						<td>{{ file.creator.username }}</td>
+						<td>
+							<form
+								role="form"
+								action="{% url 'file_destroy' file.pk %}"
+								method="post"
+								class="table_row_user-actions"
+							>
+								{% csrf_token %}
+								<button type="submit" class="btn btn-danger btn-xs">Delete</button>
+								<a class="btn btn-primary btn-xs" href="{% url 'file_history_retrieve' file.pk %}">
+									History
+								</a>
+								<button
+									type="button"
+									class="btn btn-primary btn-xs"
+									onclick="copyToClipboard(this, '{% url 'file_retrieve' file.pk %}')"
+								>
+									Share
+								</button>
+							</form>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div>
+		<h4>Collaborators</h4>
+		<div class="mt-16 table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Username</th>
+						<th>Joined At</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for project_collaboration in project.project_collaborations.all|dictsortreversed:"created_at" %}
+					<tr>
+						<td>{{ project_collaboration.user.username }}</td>
+						<td>
+							{% timezone "Asia/Tehran" %}{{ project_collaboration.created_at|date:"M j, Y, h:i A" }}{% endtimezone %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 {% endblock content %}
 

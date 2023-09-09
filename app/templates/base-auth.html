@@ -9,12 +9,26 @@
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open Sans:300,400,700">
   {% block head %}{% endblock head %}
 </head>
-
 <body>
-  <div class="container">
-    <div class="content">
+  <div class="auth-container">
+    <div class="auth-content">
       {% block content %}{% endblock content %}
     </div>
   </div>
+
+  <script>
+    const getViewportHeight = () => (
+			window.innerHeight || document.documentElement.clientHeight
+		);
+
+		const setDocumentViewportHeight = () => (
+			document.documentElement.style.setProperty(
+				'--viewport-height', `${getViewportHeight()}px`
+			)
+		);
+		
+		setDocumentViewportHeight();
+		window.addEventListener('resize', setDocumentViewportHeight);
+  </script>
 </body>
 </html>
