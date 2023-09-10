@@ -9,6 +9,7 @@ else editor_options["mode"] = fileExtension;
 const dmp = new diff_match_patch();
 const editorSocketUrl = `ws://${window.location.host}/ws/files/${filePk}/file_consumers/${fileConsumerPk}/`;
 const editor = CodeMirror.fromTextArea(document.getElementById("editor"), editor_options);
+const connectionStatus = document.getElementById("connection-status");
 
 let differencesSenderInterval = null;
 let clientDifferencesStack = {};
@@ -140,6 +141,7 @@ function editorSocketConnectionManager() {
     editorSocket = new WebSocket(editorSocketUrl);
 
     editorSocket.onopen = function(e) {
+        connectionStatus.style.backgroundColor = "green";
         differencesSenderIntervalManager(true);
     };
 
@@ -148,11 +150,14 @@ function editorSocketConnectionManager() {
     };
 
     editorSocket.onclose = function(e) {
+        connectionStatus.style.backgroundColor = "red";
         differencesSenderIntervalManager(false);
         setTimeout(editorSocketConnectionManager, 1000);
     };
 
-    editorSocket.onerror = function(e) {};
+    editorSocket.onerror = function(e) {
+        connectionStatus.style.backgroundColor = "red";
+    };
 }
 
 setInterval(calculateDifferences, 300);

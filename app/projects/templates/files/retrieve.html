@@ -20,7 +20,7 @@
 		<a href="{% url 'project_retrieve_file_create' file.project.pk %}">{{ file.project.name }}</a>
 	</li>
   <li class="active">{{ file.name }}</li>
-	<span class="connection-status"></span>
+	<span class="connection-status" id="connection-status"></span>
 </ol>
 {% endblock breadcrumb %}
 
